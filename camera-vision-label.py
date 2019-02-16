@@ -13,6 +13,12 @@ import json
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
+def is_pet(pet_type, response):
+    for analysis in response["response"][0]["labelAnnotations"]:
+        if analysis["description"] == pet_type:
+            return True
+    return False
+
 def takephoto():
     camera = picamera.PiCamera()
     camera.capture('image.jpg')
@@ -38,7 +44,9 @@ def main():
             }]
         })
         response = service_request.execute()
-        print json.dumps(response, indent=4, sort_keys=True)	#Print it out and make it somewhat pretty.
+
+        println("Dog?", "Yes" if is_pet("dog", response) else "No")
+        
 
 if __name__ == '__main__':
 
