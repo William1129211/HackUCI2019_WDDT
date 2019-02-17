@@ -12,6 +12,7 @@ import picamera
 
 from google.cloud import storage
 from googleapiclient import discovery
+from google.cloud import storage
 from oauth2client.client import GoogleCredentials
 from twilio.rest import Client
 
@@ -21,7 +22,7 @@ auth_token = 'baa0db35e954d100ef1c8ab6daacafef'
 client = Client(account_sid, auth_token)
 
 # For convenience
-usr_num = 4088394928
+usr_num = 9097356894
 
 """
 class Labels(Enum):
@@ -72,20 +73,35 @@ def sendPhotoReceiveJSON(count, camera):
         #Debugging
         print json.dumps(response, indent=4, sort_keys=True)	#Print it out and make it somewhat pretty.
 
-        send_message(get_object(response))
-        upload_blob('hackuci-2019', 'image' + str(count) + '.jpg', 'image' + str(count) + '.jpg')
+        url = cloudUpload(get_object(response), count)
+        send_message(get_object(response), url)
+
+def cloudUpload(condition, cnt):
+    bucketName = 'hackuci-2019'
+    sourceFileName = 'image' + str(cnt) + '.jpg'
+    blobName = 'image' + str(cnt)              
+ 
+    if (condition == "dog" or condition == "cat" or condition == "person"):
+        storage_client = storage.Client();
+        bucket = storage_client.get_bucket(bucketName)
+        blob = bucket.blob(blobName)
+        
+        blob.upload_from_filename(sourceFileName)
+        blob.make_public()
+
+        return blob.public_url;
 
 
-def send_message(condition):
+def send_message(condition, url):
     flag = False
     if condition == "dog":
-        body_text = "Dog is home!"
+        body_text = "Dog is home! " + url
         flag = True
     elif condition == "cat":
-        body_text = "Cat is home!"
+        body_text = "Cat is home! " + url
         flag = True
     elif condition == "person":
-        body_text = "Someone came to the door!"
+        body_text = "Someone came to the door! " + url
         flag = True
         
     if (flag):
