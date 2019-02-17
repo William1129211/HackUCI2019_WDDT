@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "hackuci-wddt",
+  "private_key_id": "81b20291206bcf487ea6961a19cf6ee1f19b3fd4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDkKLXUR9YvMnyQ\n21B+pB3vsS8fx5gy4vEScXpXIoR99Fgj18F6Z7EfVfCYaqLGH8NoqjLUQO39O2M4\ntkXy0hHUoyLpi4CHUml5AaXhavXFIZfr88W3F0a9DfExFXnKD3ci6lipr57Dk5F8\nkTXNZe0mK/L/906YKXiffSbhFRX9/sGhNSikQBKzH7lzhUTzOgt6nQ3dj1YDPNUB\nGVT4d4oTjsqmBSArJrEwQ1onp6qQhzdBcrseUUPajX0oLnAMiTHMn328StV4CriT\nz6lTWrMxBqiEVp/eVMhAMS4mWuM+rKowfOfJAfglE2Fh7KNG8kwk0j1Oh53vp/By\nUOUG5CXTAgMBAAECggEAMDY8CfHuHAYOlWuKjGAwpTwrKYt7KVGUQGHzSKNWHOl7\nkINgcnWj02vNDeAGqlf+6kiAuiJIR+j7M/osOL3UH7sjPveH/tBW0kebXlFEQtYw\n7J6T6ncELyHZlBYmKKDw+1NKzfx6z3gI16o1lMQTgyvpStZe6L9mqkj/ZLOYdJWw\n/K7rAarJZCEy2vQZlPCkd4pRyZqhmnCvxN6cwHuacOJ973qDFBK3R83iRkRDDq3L\n9kS3x3ps8Ao+OnIIjWyNS1mFHIdpDMlJQraDB1s/G2fZvleZ84E0GftmSNvsudHf\nQ5h0wnOtYnlt623JSSUmRQu0X8xrgy0C2+VnRZp59QKBgQD1taM4l7vtViGl+Yg/\nbY2eBf8fnJOB3KDX8reVoY+Xc05/DfHrQzgp+tsA2D8RCSB55ifLY/UqcVVyai54\nHqfsGpf733MA3Knref+ckepXe19CDv7+BJMMsSHPjPhyWaVcb/HWWSgqUrSBD8dj\npRNwuJyzIJbL7Gq3SB4/GRmgDQKBgQDttufpU+cbvjK7qDjZniUArDd+uw5Phf/t\niU4YRc80uzRicWdfCu3Yzeva5tyZ4ZiVe0wn1n3FypR+VuGpPtFjkfp8GnvCvv50\nweYNep/GXp1QQN+UjrFHQvHl9y/HejdM6V/Lrr/vqpe7LSbVmWocpWUykO+MYAJt\nv9ETxWeFXwKBgQCcKRjXevghW0B/cBw707DR4hXHTYgiXMqM9OHg45GTO+GDtqUu\nVMZ5R8mwu785YIeXccOQ7LKAiw83bGykQzeOQ0ic9+LrhVMpKZxfMg2yE+Ly5P0D\nDH0478sBUiME6hzCpxMYnAl+/Jlj/VdH6T51wZ816VxttpAMdHVkvNsgcQKBgQC2\n+RvHOKLicuNAGLsxno3i16ybqsXYJk+Zeh+XhVx5vUMUJzAnMxVi1RYfV6Yj+Ebn\ngJFc9Le44DaujJeEG2s21i1VC1mJzFO2cW1voJyNJ1S1aknuYmtIa9ogZcTsKUGZ\nvOTUtfzdMJU8KQQEU+Mei5y6cF9C0L/t1EDNlBwbxwKBgQCUlKF7gCMuQhdWY/hl\nWwaW17/QESJuP63mOKs88tPiwzcxpUPasSGolWlWbWhytDx44ISv7/DCIR7eVSZW\nfwLGkLFLoLNqP9UPW4PrlDcqPAFCnhU7T9zeX5N99OyyKgsZHZv5+c20IHFjyFGx\nxqqf5XPs5YeP4/00PBoV6TLtMQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "hackuci-2019@hackuci-wddt.iam.gserviceaccount.com",
+  "client_id": "100963069095818542544",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/hackuci-2019%40hackuci-wddt.iam.gserviceaccount.com"
+}
