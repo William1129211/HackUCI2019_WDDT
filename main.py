@@ -1,4 +1,4 @@
-    """
+"""
 Google Vision API Tutorial with a Raspberry Pi and Raspberry Pi Camera.  See more about it here:  https://www.dexterindustries.com/howto/use-google-cloud-vision-on-the-raspberry-pi/
 Use Google Cloud Vision on the Raspberry Pi to take a picture with the Raspberry Pi Camera and classify it with the Google Cloud Vision API.   First, we'll walk you through setting up the Google Cloud Platform.  Next, we will use the Raspberry Pi Camera to take a picture of an object, and then use the Raspberry Pi to upload the picture taken to Google Cloud.  We can analyze the picture and return labels (what's going on in the picture), logos (company logos that are in the picture) and faces.
 This script uses the Vision API's label detection capabilities to find a label
@@ -18,21 +18,15 @@ from google.cloud import storage
 from oauth2client.client import GoogleCredentials
 from twilio.rest import Client
 
+# For convenience
+usr_num = 9097356894
+twilioNum = '+19495369863'
+pet_name = ""
+
 # Your Account Sid and Auth Token from twilio.com/console
 account_sid = 'AC920f2da359f4d8b4af7b9478a0ef7ccc' 
 auth_token = 'baa0db35e954d100ef1c8ab6daacafef'
 client = Client(account_sid, auth_token)
-
-# For convenience
-usr_num = 9097356894
-const twilioNum = '+19495369863'
-
-"""
-class Labels(Enum):
-    DOG = 1;
-    CAT = 2;
-    PERSON = 3;
-"""
 
 #list of labels searched for when parsing JSON response
 detects = ["dog", "cat", "face"]
@@ -97,8 +91,7 @@ def cloudUpload(condition, cnt):
         blob.upload_from_filename(sourceFileName)
         blob.make_public()
 
-        return blob.public_url;
-
+        return blob.public_url
 
 
 def send_message(condition, url):
@@ -107,7 +100,7 @@ def send_message(condition, url):
         body_text = "Someone came to the door! " + url
         flag = True
     elif condition in detects:
-        body_text = condition + " is home! " + url
+        body_text = pet_name + " is home! " + url
         flag = True
 
         
@@ -149,13 +142,13 @@ def prompt_usr():
     global twilioNum
     global client
     global usr_num
-    messages = client.messages.list(to=twilioNum)
+    messages = client.messages.list(from_ = usr_num)
     client.messages.create(\
-        body= """Hi! We are glad that you start using Pet Portal!
+        body= """Welcome to Pet Portal!
         Type:
-        (1) if you have a dog
-        (2) if you have a cat
-        then follow by its name
+        (1) if you own a dog
+        (2) if you own a cat
+        followed by their name
         """,
         from_ = twilioNum,
         to=usr_num)
@@ -166,6 +159,8 @@ def ask_pets():
     global detects
     global usr_num
     global client
+    global pet_name
+    flag = False
     messages = client.messages.list(to=twilioNum)
     pet_code = (messages[0].body)[0]
     if pet_code not in ['1','2']:
@@ -177,14 +172,19 @@ def ask_pets():
         elif pet_code == '2':
             detects.remove('dog')
             pet_kind = 'cat'
-        name = (messages[0].body)[1:].strip(' ')
+        pet_name = (messages[0].body)[1:].strip(' ')
         body_text = \
         '''Nice! {} is a good {} name! From now Pet Portal will notify you when {} comes home.'''\
-        .format(name, pet_kind, name)
+        .format(pet_name, pet_kind, pet_name)
+        
+        flag = True
+        
     client.messages.create(\
         body= body_text,
         from_ = twilioNum,
         to=usr_num)
+    
+    return flag
 
 
 def main():
@@ -204,10 +204,9 @@ def main():
     global client
     messages = client.messages.list(to=twilioNum);
     prompt_usr()
-    time.sleep(15)
-    ask_pets();
-
-
+    
+    while(not ask_pets()):
+        time.sleep(30)
 
     try:
         while 1:
