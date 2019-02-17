@@ -21,7 +21,8 @@ auth_token = 'baa0db35e954d100ef1c8ab6daacafef'
 client = Client(account_sid, auth_token)
 
 # For convenience
-usr_num = 4088394928
+# usr_num = 4088394928
+usr_num = 9518050383
 
 
 def get_object(response):
@@ -29,9 +30,9 @@ def get_object(response):
         label_parsed = analysis["description"].lower()
         if label_parsed == "dog":
             return Labels.DOG
-        else if label_parsed == "cat":
+        elif label_parsed == "cat":
             return Labels.CAT
-        else if label_parsed in ("hair", "face"):
+        elif label_parsed in ("hair", "face"):
             return Labels.PERSON
     return 0
 
@@ -68,9 +69,9 @@ def sendPhotoReceiveJSON(count, camera):
         object_detected = get_object(response)
         if object_detected == Labels.DOG:
             send_message(0)
-        else if object_detected == Labels.CAT:
+        elif object_detected == Labels.CAT:
             send_message(1)
-        else if object_detected == Labels.PERSON:
+        elif object_detected == Labels.PERSON:
             send_message(0)
         send_message(get_object(response))
 
@@ -78,9 +79,9 @@ def sendPhotoReceiveJSON(count, camera):
 def send_message(condition):
     if object_detected == Labels.DOG:
         body_text = "Dog is at home now, safe and happy :)"
-    else if object_detected == Labels.CAT:
+    elif object_detected == Labels.CAT:
         body_text = "Cat is at home now, safe and happy :)"
-    else if object_detected == Labels.PERSON:
+    elif object_detected == Labels.PERSON:
         body_text = "Someone is on your doorstep..."
         
     if (body_text > 0):
