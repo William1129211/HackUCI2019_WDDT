@@ -6,7 +6,7 @@ import time
 account_sid = 'AC920f2da359f4d8b4af7b9478a0ef7ccc'
 auth_token = 'baa0db35e954d100ef1c8ab6daacafef'
 client = Client(account_sid, auth_token)
-usr_num = 0
+usr_num = '9097356894'
 twilioNum = '+19495369863'
 detects = ['cat','dog','person']
 #messages = client.messages.list(to='+19495369863')

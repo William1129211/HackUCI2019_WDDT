@@ -37,6 +37,8 @@ class Labels(Enum):
 #list of labels searched for when parsing JSON response
 detects = ["dog", "cat", "face"]
 
+#parses Google Vision JSON response for wanted labels, returns label if found, 
+#otherwise "normal"
 def get_object(response):
     for analysis in response["responses"][0]["labelAnnotations"]:
         label_parsed = analysis["description"].lower()
@@ -48,7 +50,11 @@ def get_object(response):
 def takephoto(count, camera):
     camera.capture('image' + str(count) + '.jpg')
 
-
+"""
+captures photograph, annotates through Google Vision, if 
+sought label is found, uploads to cloud and sends sms with 
+public url to photo
+"""
 def sendPhotoReceiveJSON(count, camera):
     takephoto(count, camera)
 
@@ -77,6 +83,7 @@ def sendPhotoReceiveJSON(count, camera):
         url = cloudUpload(get_object(response), count)
         send_message(get_object(response), url)
 
+#uploads image to cloud if relevant
 def cloudUpload(condition, cnt):
     bucketName = 'hackuci-2019'
     sourceFileName = 'image' + str(cnt) + '.jpg'
@@ -93,6 +100,7 @@ def cloudUpload(condition, cnt):
         return blob.public_url;
 
 
+
 def send_message(condition, url):
     flag = False
     if condition == "face":
@@ -106,7 +114,7 @@ def send_message(condition, url):
     if (flag):
         message = client.messages.create( \
             body=body_text,
-            from_=twilioNum
+            from_=twilioNum,
             to=usr_num)
 
 def bucket_init():
@@ -135,6 +143,24 @@ def open_door(object_id):
         time.sleep(5)
         GPIO.output(ledPin, GPIO.LOW)
 
+def prompt_usr():
+    '''Snatch program used client and modify dedicated usr_num
+       assuming usr has last texted the program'''
+    global twilioNum
+    global client
+    global usr_num
+    messages = client.messages.list(to=twilioNum)
+    client.messages.create(\
+        body= """Hi! We are glad that you start using Pet Portal!
+        Type:
+        (1) if you have a dog
+        (2) if you have a cat
+        then follow by its name
+        """,
+        from_ = twilioNum,
+        to=usr_num)
+
+
 
 def main():
     #Pin Definition:
@@ -150,6 +176,13 @@ def main():
     cntr = 1
     camera = picamera.PiCamera()
     #bucket = bucket_init()
+    global client
+    messages = client.messages.list(to=twilioNum);
+    prompt_usr()
+    time.sleep(15)
+    ask_pets();
+
+
 
     try:
         while 1:
