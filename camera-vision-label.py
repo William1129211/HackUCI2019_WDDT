@@ -15,7 +15,7 @@ from oauth2client.client import GoogleCredentials
 
 
 def is_pet(pet_type, response):
-    for analysis in response["response"][0]["labelAnnotations"]:
+    for analysis in response["responses"][0]["labelAnnotations"]:
         if analysis["description"] == pet_type:
             return True
     return False
@@ -45,8 +45,10 @@ def sendPhotoReceiveJSON(count, camera):
             }]
         })
         response = service_request.execute()
+        
+        print json.dumps(response, indent=4, sort_keys=True)	#Print it out and make it somewhat pretty.
 
-        println("Dog?", "Yes" if is_pet("dog", response) else "No")
+        print("Dog?", "Yes" if is_pet("dog", response) else "No")
         
 
 def main():
