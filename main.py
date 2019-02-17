@@ -12,6 +12,7 @@ import json
 import picamera
 
 from googleapiclient import discovery
+from google.cloud import storage
 from oauth2client.client import GoogleCredentials
 from twilio.rest import Client
 
@@ -72,19 +73,36 @@ def sendPhotoReceiveJSON(count, camera):
         #Debugging
         print json.dumps(response, indent=4, sort_keys=True)	#Print it out and make it somewhat pretty.
 
-        send_message(get_object(response))
+        url = cloudUpload(get_object(response), count)
+        send_message(get_object(response), url)
+
+def cloudUpload(condition, cnt):
+    bucketName = 'hackuci-2019'
+    sourceFileName = 'image' + str(cnt) + '.jpg'
+    blobName = 'image' + str(cnt)
+ 
+    if condition == "dog" | condition == "cat" | condition == "person":
+        storage_client = storage.Client();
+        bucket = storage_client.get_bucket(bucketName)
+        blob = bucket.blob(blobName)
+        
+        blob.upload_from_filename(sourceFileName)
+
+        return 'https://storage.googleapis.com/hackuci-2019/' + sourceFileName;
 
 
-def send_message(condition):
+
+
+def send_message(condition, url):
     flag = False
     if condition == "dog":
-        body_text = "Dog is home!"
+        body_text = "Dog is home! " + url
         flag = True
     elif condition == "cat":
-        body_text = "Cat is home!"
+        body_text = "Cat is home! " + url
         flag = True
     elif condition == "person":
-        body_text = "Someone came to the door!"
+        body_text = "Someone came to the door! " + url
         flag = True
         
     if (flag):
