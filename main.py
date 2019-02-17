@@ -8,8 +8,7 @@ based on an image's content.
 import argparse
 import base64
 import json
-# from Labels import labels
-from enum import Enum
+# from enum import Enum
 import picamera
 
 from googleapiclient import discovery
@@ -24,23 +23,24 @@ client = Client(account_sid, auth_token)
 # For convenience
 usr_num = 4088394928
 
-
+"""
 class Labels(Enum):
     DOG = 1;
     CAT = 2;
     PERSON = 3;
+"""
 
 
 def get_object(response):
     for analysis in response["responses"][0]["labelAnnotations"]:
         label_parsed = analysis["description"].lower()
         if label_parsed == "dog":
-            return Labels.DOG
+            return "dog"
         elif label_parsed == "cat":
-            return Labels.CAT
+            return "cat"
         elif label_parsed in ("hair", "face"):
-            return Labels.PERSON
-    return 0
+            return "person"
+    return "normal"
 
 
 def takephoto(count, camera):
@@ -76,15 +76,18 @@ def sendPhotoReceiveJSON(count, camera):
 
 
 def send_message(condition):
-    if condition == Labels.DOG:
-        body_text = "Dog is at home now, safe and happy :)"
-    elif condition == Labels.CAT:
-        body_text = "Cat is at home now, safe and happy :)"
-    elif condition == Labels.PERSON:
-        body_text = "Someone is on your doorstep..."
-
+    flag = False
+    if condition == "dog":
+        body_text = "Dog is home!"
+        flag = True
+    elif condition == "cat":
+        body_text = "Cat is home!"
+        flag = True
+    elif condition == "person":
+        body_text = "Someone came to the door!"
+        flag = True
         
-    if (condition > 0):
+    if (flag):
         message = client.messages.create( \
             body=body_text,
             from_='+19495369863',
@@ -92,13 +95,12 @@ def send_message(condition):
         
 
 def main():
-    print(Labels.DOG)
     cntr = 1
     camera = picamera.PiCamera()
     while(1):
         sendPhotoReceiveJSON(cntr, camera)
         cntr += 1
-        if cntr > 75:
+        if cntr > 99:
             cntr = 0
 
 
