@@ -12,7 +12,6 @@ import json
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
-
 from twilio.rest import Client
 
 # Your Account Sid and Auth Token from twilio.com/console
@@ -27,14 +26,15 @@ def is_pet(pet_type, response):
             return True
     return False
 
+
 def takephoto(count, camera):
     camera.capture('image' + str(count) + '.jpg')
 
 
 def sendPhotoReceiveJSON(count, camera):
-    takephoto(count, camera) # First take a picture
-    """Run a label request on a single image"""
+    takephoto(count, camera)
 
+    """Run a label request on a single image"""
     credentials = GoogleCredentials.get_application_default()
     service = discovery.build('vision', 'v1', credentials=credentials)
 
@@ -55,8 +55,10 @@ def sendPhotoReceiveJSON(count, camera):
         
         print json.dumps(response, indent=4, sort_keys=True)	#Print it out and make it somewhat pretty.
         print("Dog?", "Yes" if is_pet("dog", response) else "No")
+
         if is_pet("dog", response):
             send_message(4088394928, 0)
+        elif is_
 
 
 def send_message(usr_num, condition):
