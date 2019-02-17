@@ -8,7 +8,8 @@ based on an image's content.
 import argparse
 import base64
 import json
-from Labels import labels
+# from Labels import labels
+from enum import Enum
 import picamera
 
 from googleapiclient import discovery
@@ -23,6 +24,12 @@ client = Client(account_sid, auth_token)
 # For convenience
 # usr_num = 4088394928
 usr_num = 9518050383
+
+
+class Labels(Enum):
+    DOG = 1;
+    CAT = 2;
+    PERSON = 3;
 
 
 def get_object(response):
