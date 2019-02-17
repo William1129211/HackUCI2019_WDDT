@@ -97,7 +97,7 @@ def main():
     while(1):
         sendPhotoReceiveJSON(cntr, camera)
         cntr += 1
-        if cntr > 75
+        if cntr > 75:
             cntr = 0
 
 
