@@ -9,6 +9,8 @@ import argparse
 import base64
 import json
 import picamera
+import RPi.GPIO as GPIO
+import time
 
 from google.cloud import storage
 from googleapiclient import discovery
@@ -130,17 +132,36 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
         source_file_name,
         destination_blob_name))
 
+def open_door(object_id):
+    if object_id == "dog" or object_id == "cat":
+        GPIO.output(ledPin, GPIO.HIGH)
+        time.sleep(5)
+        GPIO.output(ledPin, GPIO.LOW)
+
+
 def main():
+    #Pin Definition:
+    ledPin = 3
+
+    #Pin Setup
+    GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
+    GPIO.setup(ledPin, GPIO.OUT) # LED pin set as output
+
+    #Initial state for LED
+    GPIO.output(ledPin, GPIO.LOW)
+
     cntr = 1
     camera = picamera.PiCamera()
     #bucket = bucket_init()
 
-    
-    while(1):
-        sendPhotoReceiveJSON(cntr, camera)
-        cntr += 1
-        if cntr > 99:
-            cntr = 0
+    try:
+        while 1:
+            sendPhotoReceiveJSON(cntr, camera)
+            cntr += 1
+            if cntr > 99:
+                cntr = 0
+    except KeyboardInterrupt:
+        GPIO.cleanup()
 
 
 if __name__ == '__main__':
