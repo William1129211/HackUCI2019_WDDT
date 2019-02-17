@@ -76,9 +76,11 @@ def send_message(usr_num, condition):
 def main():
     cntr = 1
     camera = picamera.PiCamera()
-    while(cntr < 30):
+    while(1):
         sendPhotoReceiveJSON(cntr, camera)
         cntr += 1
+        if cntr > 75
+            cntr = 0
 
     
 
