@@ -7,8 +7,9 @@ based on an image's content.
 
 import argparse
 import base64
-import picamera
 import json
+import labels
+import picamera
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -19,12 +20,20 @@ account_sid = 'AC920f2da359f4d8b4af7b9478a0ef7ccc'
 auth_token = 'baa0db35e954d100ef1c8ab6daacafef'
 client = Client(account_sid, auth_token)
 
+# For convenience
+usr_num = 4088394928
 
-def is_pet(pet_type, response):
+
+def get_object(response):
     for analysis in response["responses"][0]["labelAnnotations"]:
-        if analysis["description"].lower() == pet_type.lower():
-            return True
-    return False
+        label_parsed = analysis["description"].lower()
+        if label_parsed == "dog":
+            return Labels.DOG
+        else if label_parsed == "cat":
+            return Labels.CAT
+        else if label_parsed in ("hair", "face"):
+            return Labels.PERSON
+    return 0
 
 
 def takephoto(count, camera):
@@ -53,26 +62,32 @@ def sendPhotoReceiveJSON(count, camera):
         })
         response = service_request.execute()
         
+        #Debugging
         print json.dumps(response, indent=4, sort_keys=True)	#Print it out and make it somewhat pretty.
-        print("Dog?", "Yes" if is_pet("dog", response) else "No")
 
-        if is_pet("dog", response):
-            send_message(4088394928, 0)
-        elif is_
+        object_detected = get_object(response)
+        if object_detected == Labels.DOG:
+            send_message(0)
+        else if object_detected == Labels.CAT:
+            send_message(1)
+        else if object_detected == Labels.PERSON:
+            send_message(0)
+        send_message(get_object(response))
 
 
-def send_message(usr_num, condition):
-    if condition == 0:
+def send_message(condition):
+    if object_detected == Labels.DOG:
         body_text = "Dog is at home now, safe and happy :)"
-    elif condition == 1:
-        body_text = "A glutonous monstrousity is at your doorstep"
-    elif condition == 2:
+    else if object_detected == Labels.CAT:
+        body_text = "Cat is at home now, safe and happy :)"
+    else if object_detected == Labels.PERSON:
         body_text = "Someone is on your doorstep..."
         
-    message = client.messages.create( \
-        body=body_text,
-        from_='+19495369863',
-        to=usr_num)
+    if (body_text > 0):
+        message = client.messages.create( \
+            body=body_text,
+            from_='+19495369863',
+            to=usr_num)
         
 
 def main():
@@ -84,7 +99,6 @@ def main():
         if cntr > 75
             cntr = 0
 
-    
 
 if __name__ == '__main__':
 
