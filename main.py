@@ -8,9 +8,9 @@ based on an image's content.
 import argparse
 import base64
 import json
-# from enum import Enum
 import picamera
 
+from google.cloud import storage
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 from twilio.rest import Client
@@ -73,6 +73,7 @@ def sendPhotoReceiveJSON(count, camera):
         print json.dumps(response, indent=4, sort_keys=True)	#Print it out and make it somewhat pretty.
 
         send_message(get_object(response))
+        upload_blob('hackuci-2019', 'image' + str(count) + '.jpg', 'image' + str(count) + '.jpg')
 
 
 def send_message(condition):
@@ -92,11 +93,33 @@ def send_message(condition):
             body=body_text,
             from_='+19495369863',
             to=usr_num)
-        
+
+def bucket_init():
+    #Instantiates a client
+    storage_client = storage.Client()
+    
+    bucket_name = 'hackuci-2019'
+    
+    #returns bucket
+    return storage_client.create_bucket(bucket_name)
+
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+    
+    blob.upload_from_filename(source_file_name)
+    
+    print('File {} uploaded to {}.'.format(
+        source_file_name,
+        destination_blob_name))
 
 def main():
     cntr = 1
     camera = picamera.PiCamera()
+    #bucket = bucket_init()
+
+    
     while(1):
         sendPhotoReceiveJSON(cntr, camera)
         cntr += 1
