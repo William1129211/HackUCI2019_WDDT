@@ -31,16 +31,14 @@ class Labels(Enum):
     PERSON = 3;
 """
 
+#list of labels searched for when parsing JSON response
+detects = ["dog", "cat", ("hair", "face")]
 
 def get_object(response):
     for analysis in response["responses"][0]["labelAnnotations"]:
         label_parsed = analysis["description"].lower()
-        if label_parsed == "dog":
-            return "dog"
-        elif label_parsed == "cat":
-            return "cat"
-        elif label_parsed in ("hair", "face"):
-            return "person"
+        if label_parsed in detects:
+            return label_parsed
     return "normal"
 
 
@@ -81,7 +79,7 @@ def cloudUpload(condition, cnt):
     sourceFileName = 'image' + str(cnt) + '.jpg'
     blobName = 'image' + str(cnt)              
  
-    if (condition == "dog" or condition == "cat" or condition == "person"):
+    if condition in detects:
         storage_client = storage.Client();
         bucket = storage_client.get_bucket(bucketName)
         blob = bucket.blob(blobName)
@@ -94,15 +92,13 @@ def cloudUpload(condition, cnt):
 
 def send_message(condition, url):
     flag = False
-    if condition == "dog":
-        body_text = "Dog is home! " + url
-        flag = True
-    elif condition == "cat":
-        body_text = "Cat is home! " + url
-        flag = True
-    elif condition == "person":
+    if condition == "person":
         body_text = "Someone came to the door! " + url
         flag = True
+    elif condition in detects:
+        body_text = (condition[0]).upper() + condition[1:len((condition) - 1)] + " is home! " + url
+        flag = True
+
         
     if (flag):
         message = client.messages.create( \
