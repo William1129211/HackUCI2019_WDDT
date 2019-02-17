@@ -32,7 +32,7 @@ class Labels(Enum):
 """
 
 #list of labels searched for when parsing JSON response
-detects = ["dog", "cat", ("hair", "face")]
+detects = ["dog", "cat", "face"]
 
 def get_object(response):
     for analysis in response["responses"][0]["labelAnnotations"]:
@@ -92,11 +92,11 @@ def cloudUpload(condition, cnt):
 
 def send_message(condition, url):
     flag = False
-    if condition == "person":
+    if condition == "face":
         body_text = "Someone came to the door! " + url
         flag = True
     elif condition in detects:
-        body_text = (condition[0]).upper() + condition[1:len((condition) - 1)] + " is home! " + url
+        body_text = condition + " is home! " + url
         flag = True
 
         
