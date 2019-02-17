@@ -8,7 +8,7 @@ based on an image's content.
 import argparse
 import base64
 import json
-from labels import Labels
+from Labels import labels
 import picamera
 
 from googleapiclient import discovery
@@ -92,6 +92,7 @@ def send_message(condition):
         
 
 def main():
+    print(Labels.DOG)
     cntr = 1
     camera = picamera.PiCamera()
     while(1):
