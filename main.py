@@ -160,6 +160,31 @@ def prompt_usr():
         from_ = twilioNum,
         to=usr_num)
 
+def ask_pets():
+    '''modify  user has certain animals'''
+    global twilioNum
+    global detects
+    global usr_num
+    global client
+    messages = client.messages.list(to=twilioNum)
+    pet_code = (messages[0].body)[0]
+    if pet_code not in ['1','2']:
+        body_text = 'What do you have, an anteater? >:('
+    else:
+        if pet_code == '1':
+            detects.remove('cat')
+            pet_kind = 'dog'
+        elif pet_code == '2':
+            detects.remove('dog')
+            pet_kind = 'cat'
+        name = (messages[0].body)[1:].strip(' ')
+        body_text = \
+        '''Nice! {} is a good {} name! From now Pet Portal will notify you when {} comes home.'''\
+        .format(name, pet_kind, name)
+    client.messages.create(\
+        body= body_text,
+        from_ = twilioNum,
+        to=usr_num)
 
 
 def main():
