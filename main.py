@@ -73,22 +73,15 @@ def sendPhotoReceiveJSON(count, camera):
         #Debugging
         print json.dumps(response, indent=4, sort_keys=True)	#Print it out and make it somewhat pretty.
 
-        object_detected = get_object(response)
-        if object_detected == Labels.DOG:
-            send_message(0)
-        elif object_detected == Labels.CAT:
-            send_message(1)
-        elif object_detected == Labels.PERSON:
-            send_message(0)
         send_message(get_object(response))
 
 
 def send_message(condition):
-    if object_detected == Labels.DOG:
+    if condition == Labels.DOG:
         body_text = "Dog is at home now, safe and happy :)"
-    elif object_detected == Labels.CAT:
+    elif condition == Labels.CAT:
         body_text = "Cat is at home now, safe and happy :)"
-    elif object_detected == Labels.PERSON:
+    elif condition == Labels.PERSON:
         body_text = "Someone is on your doorstep..."
         
     if (body_text > 0):
