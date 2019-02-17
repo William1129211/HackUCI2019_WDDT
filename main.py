@@ -164,7 +164,7 @@ def ask_pets():
     messages = client.messages.list(to=twilioNum)
     pet_code = (messages[0].body)[0]
     if pet_code not in ['1','2']:
-        body_text = 'What do you have, an anteater? >:('
+        body_text = 'What do you have, an anteater?'
     else:
         if pet_code == '1':
             detects.remove('cat')
@@ -174,7 +174,7 @@ def ask_pets():
             pet_kind = 'cat'
         pet_name = (messages[0].body)[1:].strip(' ')
         body_text = \
-        '''Nice! {} is a good {} name! From now Pet Portal will notify you when {} comes home.'''\
+        '''{} is a good {} name! From now on Pet Portal will notify you when {} comes home.'''\
         .format(pet_name, pet_kind, pet_name)
         
         flag = True
