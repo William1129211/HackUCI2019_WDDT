@@ -82,8 +82,9 @@ def send_message(condition):
         body_text = "Cat is at home now, safe and happy :)"
     elif condition == Labels.PERSON:
         body_text = "Someone is on your doorstep..."
+
         
-    if (body_text > 0):
+    if (condition > 0):
         message = client.messages.create( \
             body=body_text,
             from_='+19495369863',
