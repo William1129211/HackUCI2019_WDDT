@@ -8,7 +8,7 @@ based on an image's content.
 import argparse
 import base64
 import json
-import labels
+from labels import Labels
 import picamera
 
 from googleapiclient import discovery
